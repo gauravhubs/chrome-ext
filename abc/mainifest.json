@@ -1,0 +1,21 @@
+{
+  "manifest_version": 2,
+
+  "name": "CS741 Site Advisor",
+  "description": "This extension shows if a site is safe to visit.",
+  "version": "1.0",
+
+  "browser_action": {
+    "default_icon": "icons/green.png",
+    "default_popup": "popup.html"
+  },
+  "permissions": [
+    "tabs",
+    "notifications"
+  ],
+
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": false
+  }
+}
