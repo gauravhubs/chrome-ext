@@ -10,6 +10,8 @@
  */
 
 // onBeforeSendHeaders
+var count=0;
+
 console.log("Loaded.");
 var flag=0;
 /* extract domain name from given URL. */
@@ -18,6 +20,7 @@ function extractDomainName(url) {
   return url.replace('http://','').replace('https://','').replace('www.','').split(/[/?#]/)[0];
 }
 var script_tag="%3Cscript%3E";
+var script_tag_normal="<script>";
 var callback = function(details) {
   console.log(details.url);
   //console.log(details.method);
@@ -27,11 +30,14 @@ var callback = function(details) {
     console.log(details.method);
     //var formdata = details.requestBody.formData;
     if (details.url.indexOf(script_tag) != -1 ){
+      count++;
+      //notif();
       return { cancel:true};
+
     }    
   }
   else if(method === 'POST'){
-    //console.log(details);
+    console.log("post method onBeforeSendHeaders");
     // xtract form data and look on posted vata and validate check for script tag
     //var formdata = details.requestBody.formData;
     //console.log(formdata);
@@ -41,7 +47,15 @@ var callback = function(details) {
     //}    
     if(flag==1){
       flag=0;
-      cancel:true;
+      count++;
+					chrome.notifications.create("warn",{
+					type:"image",
+					iconUrl:"icon.png",
+					title:"Warning!",
+					message:"Number of sites blocked : " + count,
+					imageUrl:"icon.png"
+				},function(id){/*just an empty callback function*/});      
+				return {cancel:true};
     }
   }
   
@@ -65,7 +79,7 @@ var callback1 = function(details) {
   var method = details.method;
   
   if(method === 'POST'){
-    //console.log(details.requestBody.formData);
+    console.log(details.requestBody.formData);
     // xtract form data and look on posted vata and validate check for script tag
     //var formdata = details.requestBody.formData;
     //console.log(formdata);
@@ -91,15 +105,23 @@ var callback1 = function(details) {
         //keys.push(key);
         var data1 = dictionary[key];
         for (var i = 0; i < data1.length; ++i) {
-          if(data1[i].indexOf(script_tag) != -1 ){
-            flag=1;
+          if(data1[i].toString().indexOf(script_tag_normal) != -1 ){
+            
+          	console.log(data1[i].toString().indexOf(script_tag_normal));
+          	flag=1;
+          	break;
+          	//return {cancel:true};
           }
+
+          //console.log(data1[i]);
         }
-        console.log(dictionary[key]);
+        if(flag==1) break;
+        //console.log(data1[0].toString().indexOf(script_tag));
+        //console.log(dictionary[key]);
       }
     }
     
-    
+// var text2 = text1.toLowerCase();     
             
     //console.log(details.requestBody.formData);
     
@@ -114,3 +136,4 @@ var opt_extraInfoSpec1 = ["requestBody"];
 
 chrome.webRequest.onBeforeRequest.addListener(callback1, filter1, opt_extraInfoSpec1 );
 
+/* show a notification*/
