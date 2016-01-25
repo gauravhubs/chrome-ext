@@ -31,7 +31,9 @@ var callback = function(details) {
     console.log("test this");
     console.log(details.url.toString().toUpperCase());
     //var formdata = details.requestBody.formData;
-    if (decodeURIComponent(details.url.toString()).match(/({%3C*}|<)[^*]?[\s\S]*?script[\s\S]*?({%3E}|>)[\s\S]*?({%3C}|<)[\s\S]*?\/[\s\S]*?script[\s\S]*?({%3E}|>)/gi) != null ){
+    //if (decodeURIComponent(details.url.toString()).match(/({%3C*}|<)[^*]?[\s\S]*?script[\s\S]*?({%3E}|>)[\s\S]*?({%3C}|<)[\s\S]*?\/[\s\S]*?script[\s\S]*?({%3E}|>)/gi) != null ){
+    if (decodeURIComponent(details.url.toString()).match(/({%3C*}|<)[^*]?[\s\S]*?script[\s\S]*?({%3E}|>)/gi) != null ){
+    
       count++;
       //notif();
       alert("Request blocked");
@@ -103,7 +105,7 @@ var callback1 = function(details) {
         //keys.push(key);
         var data1 = dictionary[key];
         for (var i = 0; i < data1.length; ++i) {
-          if(data1[i].toString().toUpperCase().match(/({%3C*}|<)[^*]?[\s\S]*?script[\s\S]*?({%3E}|>)[\s\S]*?({%3C}|<)[\s\S]*?\/[\s\S]*?script[\s\S]*?({%3E}|>)/gi) != null ){
+          if(data1[i].toString().toUpperCase().match(/({%3C*}|<)[^*]?[\s\S]*?script[\s\S]*?({%3E}|>)/gi) != null ){
             
           	console.log(data1[i].toString().indexOf(script_tag_normal));
           	flag=1;
